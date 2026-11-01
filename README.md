@@ -17,11 +17,7 @@
 
 <br />
 
-<div dir="rtl" align="right">
-
-**سلام، من سهندم 👋** با پایتون روی داده‌ی بازارهای شلوغ کار می‌کنم: از جمع‌آوری و تمیز کردن آگهی‌ها تا مدل‌سازی و تصمیم. **CARO** برای آگهی‌های خودروی کارکرده بازه‌ی قیمت بازار را تخمین می‌زند و بعد سعی می‌کند خودش را رد کند. **SorinFlow** آگهی‌های ملک دیوار را جمع‌آوری می‌کند، داده‌ها را مدیریت می‌کند و همه را به یک CRM فارسی می‌رساند.
-
-</div>
+**Hi, I'm Sahand 👋** I use Python to turn messy marketplace data into decisions: collecting and cleaning listings, then modelling them. **CARO** estimates a used-car listing's market range, then tries to prove itself wrong. **SorinFlow** collects property listings from Divar, manages the data and brings it all into a Persian CRM.
 
 <br />
 
