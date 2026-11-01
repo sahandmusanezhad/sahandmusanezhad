@@ -13,7 +13,7 @@
 
 <br />
 
-<img src="assets/about.svg" width="100%" alt="An anime portrait of Sahand coding on a laptop with CARO and SorinFlow stickers, beside a terminal: whoami prints 'sahand musanezhad — python · data · ml', ls ~/projects lists caro and sorinflow, and echo $MOTTO prints داده‌ی تمیز، تصمیم درست." />
+<img src="assets/about.svg" width="100%" alt="An anime portrait of Sahand coding on a laptop with CARO and SorinFlow stickers, beside a terminal: whoami prints 'sahand musanezhad — python · data · ml', ls ~/projects lists caro and sorinflow, sed -n 5p caro/README.md prints 'CARO estimates a market range for a listing, then tries to prove itself wrong.', and echo $MOTTO prints داده‌ی تمیز، تصمیم درست (clean data, right decision)." />
 
 <br />
 
