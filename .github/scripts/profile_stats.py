@@ -127,10 +127,11 @@ def summarize(user):
     top = sorted(langs.items(), key=lambda kv: -kv[1][0])[:4]
     return dict(
         total=cal["totalContributions"], current=current, longest=longest, weeks=weeks[-53:],
+        active=sum(1 for c in counts if c > 0),
         stars=stars if repos["totalCount"] is not None else None, repos=repos["totalCount"],
         followers=(user.get("followers") or {}).get("totalCount"),
         prs=user["contributionsCollection"].get("totalPullRequestContributions"),
-        langs=[(n, s / total, c) for n, (s, c) in top],
+        langs=[(n, s / total, c) for n, (s, c) in top if s / total >= 0.01],
         updated=days[-1][0] if days else dt.date.today().isoformat())
 
 
@@ -176,7 +177,9 @@ def render(s):
              f'<linearGradient id="gn" x1="0" x2="1"><stop offset="0" stop-color="{C["cyan"]}"/>'
              f'<stop offset=".55" stop-color="{C["violet"]}"/><stop offset="1" stop-color="{C["magenta"]}"/></linearGradient>'
              f'<rect x="54" y="96" width="{bw + 4:.0f}" height="64" fill="url(#gn)" mask="url(#mn)"/>')
-    for i, (lab, val) in enumerate((("CURRENT STREAK", s["current"]), ("LONGEST STREAK", s["longest"]))):
+    # a streak of 0 or 1 says little; the year's active days always say something
+    first = ("CURRENT STREAK", s["current"]) if s["current"] >= 2 else ("ACTIVE DAYS", s["active"])
+    for i, (lab, val) in enumerate((first, ("LONGEST STREAK", s["longest"]))):
         x = 56 + i * 190
         o.append(text("m5", lab, 12.5, x, 204, tracking=0.12, fill=C["muted"])[0])
         v, vw = text("num", str(val), 30, x, 242, fill=C["text"])
@@ -199,7 +202,7 @@ def render(s):
     bars, labels, last_m, last_x = [], [], None, -99
     for i, (start, c) in enumerate(weeks):
         x = x0 + i * step
-        h = 3 if c == 0 else max(6, (base - top) * c / mx)
+        h = 3 if c == 0 else max(6, (base - top) * (c / mx) ** 0.5)   # sqrt: one busy week does not flatten the rest
         fill = "#1C1C30" if c == 0 else "url(#gb)"
         cls = ' class="bar"' if c else ""
         bars.append(f'<rect{cls} x="{x:.1f}" y="{base - h:.1f}" width="{bwid:.1f}" height="{h:.1f}" rx="{min(3, bwid / 2):.1f}" '
@@ -217,7 +220,7 @@ def render(s):
     # chips
     cx = 56
     for label, val in (("STARS", s["stars"]), ("PUBLIC REPOS", s["repos"]), ("FOLLOWERS", s["followers"]), ("PULL REQUESTS", s["prs"])):
-        if val is None:
+        if not val:
             continue
         c, w = chip(cx, 290, label, f"{val:,}")
         o.append(c)
@@ -256,7 +259,7 @@ def render(s):
            "@media (prefers-reduced-motion: reduce){*{animation:none!important}}")
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" fill="none" role="img" aria-labelledby="t d">
 <title id="t">GitHub activity</title>
-<desc id="d">{s["total"]:,} contributions in the last 12 months; current streak {s["current"]} days, longest {s["longest"]} days.</desc>
+<desc id="d">{s["total"]:,} contributions in the last 12 months on {s["active"]} active days; current streak {s["current"]} days, longest {s["longest"]} days.</desc>
 <style>{css}</style>
 <defs>{defs}
 <clipPath id="cc"><rect width="{W}" height="{H}" rx="28"/></clipPath>
